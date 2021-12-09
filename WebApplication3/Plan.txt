@@ -1,1 +1,16 @@
-﻿
+﻿1. Lage frontend på modul 2-måten for det vi trenger. 
+ - Vise alle personer
+    => mulighet for filtrering, dvs. søk
+	=> Paging og sortering
+ - Vise alle interesser
+ - Vise alle interessene til en person
+ - Vise alle personene til en interesse
+ - Legge til at en person har en interesse
+	=> Slette
+	=> Legg til ny person
+	=> Legg til ny interesse
+
+2. Lage backend for det samme, dvs. controllere og metoder i controllerne
+   Databasen eksisterer allerede. 
+
+3. ??

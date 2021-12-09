@@ -1,8 +1,10 @@
-﻿namespace WebApplication3.DbModels
+﻿using System;
+
+namespace WebApplication3.DbModels
 {
     public class PersonInterest
     {
-        public string Person { get; set; }
-        public string Interest { get; set; }
+        public Guid PersonId { get; set; }
+        public Guid InterestId { get; set; }
     }
 }

@@ -4,22 +4,85 @@
     <meta charset="utf-8" />
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="db.js"></script>
 </head>
 <body>
-    <h1>Hei</h1>
-<script>
-    getData();
-    async function getData() {
-        let response = await axios.get('/api/peopleinterest');
-        console.log(response.data);
-    }
+    <h1>Personer og Interesser Super App</h1>
+    <div id="app"></div>
+    <script>
+        const model = {
+            people: [],
+            interests: [],
+            interestsOfSelectedPerson: [],
+            peopleOfSelectedInterest: [],
+            selectedPersonId: null,
+            selectedInterestId: null,
+        };
 
-    putData();
-    async function putData() {
-        let data = { person: 'Knut', interest: 'Fallskjermhopping'};
-        let response = await axios.put('/api/peopleinterest', data);
-        console.log(response.data);
-    }
-</script>
+        init();
+
+        // view
+        function updateView() {
+            document.getElementById('app').innerHTML = `
+                    <h3>Personer</h3>
+                        ${model.people.map(p => `
+                        <li>${p.name} <button onclick="selectPerson('${p.id}')">velg</button></li>
+                        `).join('')}
+                    <h3>Interesser</h3>
+                        ${model.interests.map(i => `
+                        <li>${i.name} <button onclick="addInterest('${i.id}')">legg til for valgt person</button></li>
+                        `).join('')}
+                    <h3>${getHeaderSelectedPerson()}</h3>
+                        ${model.interestsOfSelectedPerson.map(i => `
+                        <li>${i.name} <button onclick="selectInterest('${i.id}')">velg</button></li>
+                        `).join('')}
+                    <h3>${getHeaderSelectedInterest()}</h3>
+                        ${model.peopleOfSelectedInterest.map(p => `
+                        <li>${p.name} <button onclick="selectPerson('${p.id}')">velg</button></li>
+                        `).join('')}
+                `;
+        }
+
+        function getHeaderSelectedPerson() {
+            const id = model.selectedPersonId;
+            if (id === null) return '';
+            const name = model.people.find(p => p.id === id).name;
+            return `Interessene til ${name}`;
+        }
+
+        function getHeaderSelectedInterest() {
+            const id = model.selectedInterestId;
+            if (id === null) return '';
+            const name = model.interests.find(i => i.id === id).name;
+            return `Personene som er interesert i ${name}`;
+        }
+
+
+        // controller
+        async function init() {
+            model.people = await getPeople();
+            model.interests = await getInterests();
+            updateView();
+        }
+
+        async function selectPerson(personId) {
+            model.selectedPersonId = personId;
+            model.interestsOfSelectedPerson = await getInterestsForOnePerson(personId);
+            updateView();
+        }
+
+        async function selectInterest(interestId) {
+            model.selectedInterestId = interestId;
+            model.peopleOfSelectedInterest = await getPeopleForOneInterest(interestId);
+            updateView();
+        }
+
+
+        async function addInterest(interestId) {
+            const personId = model.selectedPersonId;
+            await addInterestForOnePerson(personId, interestId);
+            selectPerson(personId);
+        }
+    </script>
 </body>
 </html>
