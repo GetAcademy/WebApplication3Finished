@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Hei</h1>
+<script>
+    getData();
+    async function getData() {
+        let response = await axios.get('/api/peopleinterest');
+        console.log(response.data);
+    }
+
+    putData();
+    async function putData() {
+        let data = { person: 'Knut', interest: 'Fallskjermhopping'};
+        let response = await axios.put('/api/peopleinterest', data);
+        console.log(response.data);
+    }
+</script>
+</body>
+</html>
